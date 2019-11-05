@@ -9,5 +9,5 @@ type ConfigurationOptions struct {
 
 type Configuration struct {
 	Config		ConfigurationOptions
-	Controller	api.DataController `mapstructure:"controller"`
+	Controllers	[]api.DataController `mapstructure:"controller"`
 }

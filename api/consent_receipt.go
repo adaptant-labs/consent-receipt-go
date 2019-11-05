@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
+	"strings"
 	"time"
 )
 
@@ -38,6 +39,25 @@ func (cr *ConsentReceipt) AddDataController(controller *DataController) {
 
 func (cr *ConsentReceipt) AddService(service *Service) {
 	cr.Services = append(cr.Services, service)
+}
+
+func (cr *ConsentReceipt) GenerateJurisdictions() {
+	// The simple case - a single controller serving a single country
+	if len(cr.DataControllers) == 1 {
+		cr.Jurisdiction = cr.DataControllers[0].Address.Country
+		return
+	}
+
+	var jurisdictions []string
+
+	// In the case of multiple controllers, each controller is a possible jurisdiction
+	for _, val := range cr.DataControllers {
+		jurisdictions = append(jurisdictions, val.Address.Country)
+	}
+
+	// Pull out the unique ones and return this in the expected format
+	uniqueJurisdictions := uniqueStrings(jurisdictions)
+	cr.Jurisdiction = strings.Join(uniqueJurisdictions, " ")
 }
 
 type ConsentReceiptClaims struct {
