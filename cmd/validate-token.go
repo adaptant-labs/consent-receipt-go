@@ -30,7 +30,7 @@ func parseJwtToken(tokenStr string) (*jwt.Token, error) {
 			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 		}
 
-		return signingKey, nil
+		return cfg.Config.SigningKey, nil
 	})
 }
 

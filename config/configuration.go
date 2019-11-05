@@ -2,6 +2,11 @@ package config
 
 import "github.com/adaptant-labs/consent-receipt-go/api"
 
+type ConfigurationOptions struct {
+	SigningKey	[]byte `mapstructure:"signing-key"`
+}
+
 type Configuration struct {
-	Controller api.DataController `mapstructure:"controller"`
+	Config		ConfigurationOptions
+	Controller	api.DataController `mapstructure:"controller"`
 }

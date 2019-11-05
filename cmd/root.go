@@ -13,7 +13,6 @@ import (
 var (
   cfgFile string
   cfg config.Configuration
-  signingKey = []byte("totally-legitimate-secret-key")
 )
 
 var rootCmd = &cobra.Command{
@@ -32,6 +31,12 @@ func init() {
   cobra.OnInitialize(initConfig)
 
   rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.consent-receipt-go.toml)")
+}
+
+func validateConfiguration(cfg *config.Configuration) {
+  if cfg.Config.SigningKey == nil {
+    cfg.Config.SigningKey = []byte("totally-secret-key")
+  }
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -61,5 +66,7 @@ func initConfig() {
     if err != nil {
       log.Fatal(err)
     }
+
+    validateConfiguration(&cfg)
   }
 }
