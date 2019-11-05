@@ -7,17 +7,10 @@ import (
 	"github.com/spf13/cobra"
 	"io/ioutil"
 	"log"
-	"os"
 )
 
 func validateJsonReceipt(filename string) bool {
-	jsonFile, err := os.Open(filename)
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer jsonFile.Close()
-
-	data, err := ioutil.ReadAll(jsonFile)
+	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -44,7 +37,7 @@ var validateReceiptCmd = &cobra.Command{
 		}
 
 		valid := validateJsonReceipt(filename)
-		if (valid) {
+		if valid {
 			fmt.Println("Receipt is valid");
 		} else {
 			fmt.Println("Receipt is invalid")
