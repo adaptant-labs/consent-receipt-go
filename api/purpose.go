@@ -11,17 +11,18 @@ type Purpose struct {
 	ThirdPartyName			string `json:"thirdPartyName,omitempty"`
 }
 
-func NewPurpose(purposeName string, termination string) *Purpose {
+func NewPurpose(purposeName string, primaryPurpose bool, termination string) *Purpose {
 	return &Purpose{
 		Purpose:				purposeName,
 		ConsentType:			"EXPLICIT",
+		PrimaryPurpose:			primaryPurpose,
 		ThirdPartyDisclosure:	false,
 		Termination:			termination,
 	}
 }
 
-func NewPurposeShared(purposeName string, termination string, thirdPartyName string) *Purpose {
-	purpose := NewPurpose(purposeName, termination)
+func NewPurposeShared(purposeName string, primaryPurpose bool, termination string, thirdPartyName string) *Purpose {
+	purpose := NewPurpose(purposeName, primaryPurpose, termination)
 
 	purpose.ThirdPartyDisclosure = true
 	purpose.ThirdPartyName = thirdPartyName

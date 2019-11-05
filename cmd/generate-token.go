@@ -9,9 +9,15 @@ import (
 )
 
 func generateJwtToken() (string, error) {
-	controller := api.NewDataController()
+	purpose := api.NewPurpose("testing", true, "n/a")
+	service := api.NewServiceSinglePurpose("testing", purpose)
+
+	address := api.NewPostalAddress("DE", "Deisenhofen", "82041", "Bahnhofstr. 36")
+	controller := api.NewDataController("Adaptant Solutions AG", "Max Musterman", "compliance@adaptant.io", "49-00-00000000", address)
+
 	cr := api.NewConsentReceipt()
 	cr.AddDataController(controller)
+	cr.AddService(service)
 
 	// Create the Claims
 	claims := cr.GenerateClaims()
