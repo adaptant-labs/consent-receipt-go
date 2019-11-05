@@ -12,7 +12,7 @@ import (
 
 var (
   cfgFile string
-  cfg config.Configuration
+  cfg = &config.Configuration{}
 )
 
 var rootCmd = &cobra.Command{
@@ -31,12 +31,6 @@ func init() {
   cobra.OnInitialize(initConfig)
 
   rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.consent-receipt-go.toml)")
-}
-
-func validateConfiguration(cfg *config.Configuration) {
-  if cfg.Config.SigningKey == "" {
-    cfg.Config.SigningKey = "totally-secret-key"
-  }
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -62,11 +56,12 @@ func initConfig() {
   // If a config file is found, read it in.
   if err := viper.ReadInConfig(); err == nil {
     fmt.Println("Using config file:", viper.ConfigFileUsed())
-    err = viper.Unmarshal(&cfg)
+    err = viper.Unmarshal(cfg)
     if err != nil {
       log.Fatal(err)
     }
 
-    validateConfiguration(&cfg)
+    // Set any other defaults that may be missing from the config file
+    cfg.SetDefaults()
   }
 }
