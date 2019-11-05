@@ -2,23 +2,26 @@ package cmd
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/spf13/cobra"
+	"log"
 	"os"
 )
 
 var dumpToken bool
 
-func dumpJwtToken(token *jwt.Token) {
+func dumpJwtToken(token *jwt.Token) error {
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return
+		return errors.New("Failed to extract claims from token")
 	}
 
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetIndent("", "\t")
-	encoder.Encode(claims)
+
+	return encoder.Encode(claims)
 }
 
 func parseJwtToken(tokenStr string) (*jwt.Token, error) {
@@ -42,7 +45,10 @@ var validateTokenCmd = &cobra.Command{
 			fmt.Println("Token is invalid")
 		} else {
 			if dumpToken {
-				dumpJwtToken(token)
+				err := dumpJwtToken(token)
+				if err != nil {
+					log.Fatal(err)
+				}
 			} else {
 				fmt.Println("Token is valid")
 			}
