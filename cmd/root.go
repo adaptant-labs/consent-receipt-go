@@ -2,16 +2,17 @@ package cmd
 
 import (
   "fmt"
-  "os"
-  "github.com/spf13/cobra"
-
+  "github.com/adaptant-labs/consent-receipt-go/config"
   homedir "github.com/mitchellh/go-homedir"
+  "github.com/spf13/cobra"
   "github.com/spf13/viper"
-
+  "log"
+  "os"
 )
 
 var (
   cfgFile string
+  cfg config.Configuration
   signingKey = []byte("totally-legitimate-secret-key")
 )
 
@@ -30,7 +31,7 @@ func Execute() {
 func init() {
   cobra.OnInitialize(initConfig)
 
-  rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.consent-receipt-go.yaml)")
+  rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.consent-receipt-go.toml)")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -56,5 +57,9 @@ func initConfig() {
   // If a config file is found, read it in.
   if err := viper.ReadInConfig(); err == nil {
     fmt.Println("Using config file:", viper.ConfigFileUsed())
+    err = viper.Unmarshal(&cfg)
+    if err != nil {
+      log.Fatal(err)
+    }
   }
 }

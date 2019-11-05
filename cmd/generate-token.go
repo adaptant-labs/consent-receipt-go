@@ -12,11 +12,8 @@ func generateJwtToken() (string, error) {
 	purpose := api.NewPurpose("testing", true, "n/a")
 	service := api.NewServiceSinglePurpose("testing", purpose)
 
-	address := api.NewPostalAddress("DE", "Deisenhofen", "82041", "Bahnhofstr. 36")
-	controller := api.NewDataController("Adaptant Solutions AG", "Max Musterman", "compliance@adaptant.io", "49-00-00000000", address)
-
-	cr := api.NewConsentReceipt()
-	cr.AddDataController(controller)
+	controller := cfg.Controller
+	cr := controller.NewConsentReceipt()
 	cr.AddService(service)
 
 	// Create the Claims
@@ -35,6 +32,10 @@ var generateTokenCmd = &cobra.Command{
 	Use:   "token",
 	Short: "Generate a new JWT token",
 	Run: func(cmd *cobra.Command, args []string) {
+		if cfg.Controller.ControllerName == "" {
+			log.Fatal("Missing controller definition")
+		}
+
 		token, err := generateJwtToken()
 		if err != nil {
 			log.Fatal(err)

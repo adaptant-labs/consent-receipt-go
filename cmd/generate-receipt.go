@@ -13,11 +13,7 @@ func generateJsonReceipt() error {
 	purpose := api.NewPurpose("testing", true, "n/a")
 	service := api.NewServiceSinglePurpose("testing", purpose)
 
-	address := api.NewPostalAddress("DE", "Deisenhofen", "82041", "Bahnhofstr. 36")
-	address.Region = "BY"
-
-	controller := api.NewDataController("Adaptant Solutions AG", "Max Musterman", "compliance@adaptant.io", "49-00-00000000", address)
-
+	controller := cfg.Controller
 	cr := controller.NewConsentReceipt()
 	cr.AddService(service)
 
@@ -32,6 +28,10 @@ var generateReceiptCmd = &cobra.Command{
 	Use:   "receipt",
 	Short: "Generate a JSON-based Consent Receipt",
 	Run: func(cmd *cobra.Command, args []string) {
+		if cfg.Controller.ControllerName == "" {
+			log.Fatal("Missing controller definition")
+		}
+
 		err := generateJsonReceipt()
 		if err != nil {
 			log.Fatal(err)

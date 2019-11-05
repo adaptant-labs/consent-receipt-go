@@ -1,12 +1,12 @@
 package api
 
 type PostalAddress struct {
-	Country				string `json:"addressCountry"`
-	Locality			string `json:"addressLocality"`
-	Region				string `json:"addressRegion,omitempty"`
-	PostOfficeBoxNumber	string `json:"postOfficeBoxNumber,omitempty"`
-	PostalCode			string `json:"postalCode"`
-	StreetAddress		string `json:"streetAddress"`
+	Country				string `json:"addressCountry" mapstructure:"country"`
+	Locality			string `json:"addressLocality" mapstructure:"city"`
+	Region				string `json:"addressRegion,omitempty" mapstructure:"region"`
+	PostOfficeBoxNumber	string `json:"postOfficeBoxNumber,omitempty" mapstructure:"pobox"`
+	PostalCode			string `json:"postalCode" mapstructure:"postalcode"`
+	StreetAddress		string `json:"streetAddress" mapstructure:"address"`
 }
 
 func NewPostalAddress(country string, locality string, postalcode string, address string) PostalAddress {
@@ -19,13 +19,13 @@ func NewPostalAddress(country string, locality string, postalcode string, addres
 }
 
 type DataController struct {
-	ControllerName		string `json:"piiController"`
-	OnBehalf			bool `json:"on_behalf,omitempty"`
-	Contact				string `json:"contact"`
-	Address				PostalAddress `json:"address"`
-	Email				string `json:"email"`
-	Phone				string `json:"phone"`
-	ControllerUrl		string `json:"piiControllerUrl,omitempty"`
+	ControllerName		string `json:"piiController" mapstructure:"name"`
+	OnBehalf			bool `json:"on_behalf,omitempty" mapstructure:"onbehalf"`
+	Contact				string `json:"contact" mapstructure:"contact"`
+	Address				PostalAddress `json:"address" mapstructure:"address"`
+	Email				string `json:"email" mapstructure:"email"`
+	Phone				string `json:"phone" mapstructure:"phone"`
+	ControllerUrl		string `json:"piiControllerUrl,omitempty" mapstructure:"url"`
 }
 
 func NewDataController(controllerName string, contactName string, email string, phone string, address PostalAddress) *DataController {
@@ -41,6 +41,9 @@ func NewDataController(controllerName string, contactName string, email string, 
 
 func (dc *DataController) NewConsentReceipt() *ConsentReceipt {
 	cr := NewConsentReceipt()
+
 	cr.AddDataController(dc)
+	cr.Jurisdiction = dc.Address.Country
+
 	return cr
 }
