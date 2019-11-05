@@ -1,12 +1,34 @@
 package cmd
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/adaptant-labs/consent-receipt-go/api"
 	"github.com/spf13/cobra"
+	"io/ioutil"
 	"log"
+	"os"
 )
 
 func validateJsonReceipt(filename string) bool {
+	jsonFile, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer jsonFile.Close()
+
+	data, err := ioutil.ReadAll(jsonFile)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var claims api.ConsentReceiptClaims
+
+	err = json.Unmarshal(data, &claims)
+	if err != nil {
+		return false
+	}
+
 	return true
 }
 

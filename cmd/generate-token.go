@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/adaptant-labs/consent-receipt-go/api"
 	"github.com/dgrijalva/jwt-go"
-
 	"github.com/spf13/cobra"
+	"log"
 )
 
 func generateJwtToken() (string, error) {
@@ -31,7 +31,7 @@ var generateTokenCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		token, err := generateJwtToken()
 		if err != nil {
-			panic(err)
+			log.Fatal(err)
 		}
 
 		fmt.Println(token)
