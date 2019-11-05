@@ -19,7 +19,7 @@ func generateJwtToken() (string, error) {
 	// Create the Claims
 	claims := cr.GenerateClaims()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	ss, err := token.SignedString(cfg.Config.SigningKey)
+	ss, err := token.SignedString([]byte(cfg.Config.SigningKey))
 	if err != nil {
 		return "", err
 	}

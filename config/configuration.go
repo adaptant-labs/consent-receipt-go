@@ -3,7 +3,7 @@ package config
 import "github.com/adaptant-labs/consent-receipt-go/api"
 
 type ConfigurationOptions struct {
-	SigningKey	[]byte `mapstructure:"signing-key"`
+	SigningKey	string `mapstructure:"signing-key"`
 }
 
 type Configuration struct {

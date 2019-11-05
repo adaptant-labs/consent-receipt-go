@@ -34,8 +34,8 @@ func init() {
 }
 
 func validateConfiguration(cfg *config.Configuration) {
-  if cfg.Config.SigningKey == nil {
-    cfg.Config.SigningKey = []byte("totally-secret-key")
+  if cfg.Config.SigningKey == "" {
+    cfg.Config.SigningKey = "totally-secret-key"
   }
 }
 
