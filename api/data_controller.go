@@ -38,3 +38,9 @@ func NewDataController(controllerName string, contactName string, email string, 
 		Phone:			phone,
 	}
 }
+
+func (dc *DataController) NewConsentReceipt() *ConsentReceipt {
+	cr := NewConsentReceipt()
+	cr.AddDataController(dc)
+	return cr
+}

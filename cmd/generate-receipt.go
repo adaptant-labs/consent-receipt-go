@@ -14,10 +14,11 @@ func generateJsonReceipt() error {
 	service := api.NewServiceSinglePurpose("testing", purpose)
 
 	address := api.NewPostalAddress("DE", "Deisenhofen", "82041", "Bahnhofstr. 36")
+	address.Region = "BY"
+
 	controller := api.NewDataController("Adaptant Solutions AG", "Max Musterman", "compliance@adaptant.io", "49-00-00000000", address)
 
-	cr := api.NewConsentReceipt()
-	cr.AddDataController(controller)
+	cr := controller.NewConsentReceipt()
 	cr.AddService(service)
 
 	encoder := json.NewEncoder(os.Stdout)
