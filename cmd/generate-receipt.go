@@ -17,6 +17,10 @@ func generateJsonReceipt() error {
 	cr := controller.NewConsentReceipt()
 	cr.AddService(service)
 
+	if cr.PolicyUrl == "" {
+		cr.PolicyUrl = cfg.Config.PrivacyPolicyUrl
+	}
+
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetIndent("", "\t")
 

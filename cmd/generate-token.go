@@ -16,6 +16,10 @@ func generateJwtToken() (string, error) {
 	cr := controller.NewConsentReceipt()
 	cr.AddService(service)
 
+	if cr.PolicyUrl == "" {
+		cr.PolicyUrl = cfg.Config.PrivacyPolicyUrl
+	}
+
 	// Create the Claims
 	claims := cr.GenerateClaims()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
