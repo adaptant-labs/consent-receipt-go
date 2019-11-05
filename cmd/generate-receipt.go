@@ -10,9 +10,14 @@ import (
 )
 
 func generateJsonReceipt() error {
+	purpose := api.NewPurpose("testing", "n/a")
+	service := api.NewServiceSinglePurpose("testing", purpose)
+
 	controller := api.NewDataController()
+
 	cr := api.NewConsentReceipt()
 	cr.AddDataController(controller)
+	cr.AddService(service)
 
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetIndent("", "\t")
