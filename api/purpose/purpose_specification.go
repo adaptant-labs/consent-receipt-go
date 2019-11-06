@@ -183,3 +183,12 @@ func PurposeSpecificationFromString(purposeStr string) PurposeSpecification {
 	log.Printf("Invalid purpose specification (%d)\n", num)
 	return purposeUndefined
 }
+
+func DumpPurposeSpecifications() []string {
+	purposes := make([]string, 0)
+	for i := purposeUndefined + 1; i < maxPurposes; i++ {
+		purposes = append(purposes, i.PurposeWithPrefix())
+	}
+
+	return purposes
+}

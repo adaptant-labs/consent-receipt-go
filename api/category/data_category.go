@@ -30,26 +30,27 @@ const (
 	Membership
 	Behavioral
 	Profiling
+	maxCategories
 )
 
 var toString = map[DataCategory]string{
 	categoryUndefined: "",
-	Biographical: "Biographical",
-	Contact: "Contact",
-	Biometric: "Biometric",
-	SocialContact: "SocialContact",
-	NetworkService: "NetworkService",
-	Health: "Health",
-	Financial: "Financial",
-	OfficialID: "OfficialID",
+	Biographical:      "Biographical",
+	Contact:           "Contact",
+	Biometric:         "Biometric",
+	SocialContact:     "SocialContact",
+	NetworkService:    "NetworkService",
+	Health:            "Health",
+	Financial:         "Financial",
+	OfficialID:        "OfficialID",
 	SocialBenefitData: "SocialBenefitData",
-	JudicialData: "JudicialData",
-	AssetData: "AssetData",
-	HRData: "HRData",
-	MentalHealth: "MentalHealth",
-	Membership: "Membership",
-	Behavioral: "Behavioral",
-	Profiling: "Profiling",
+	JudicialData:      "JudicialData",
+	AssetData:         "AssetData",
+	HRData:            "HRData",
+	MentalHealth:      "MentalHealth",
+	Membership:        "Membership",
+	Behavioral:        "Behavioral",
+	Profiling:         "Profiling",
 }
 
 func (c DataCategory) MarshalJSON() ([]byte, error) {
@@ -130,4 +131,13 @@ func DataCategoryFromString(categoryStr string) DataCategory {
 
 	log.Printf("Invalid category specification (%d)\n", num)
 	return categoryUndefined
+}
+
+func DumpDataCategories() []string {
+	categories := make([]string, 0)
+	for i := categoryUndefined + 1; i < maxCategories; i++ {
+		categories = append(categories, i.CategoryWithPrefix())
+	}
+
+	return categories
 }
