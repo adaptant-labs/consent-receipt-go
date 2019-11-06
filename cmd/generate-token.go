@@ -9,8 +9,7 @@ import (
 )
 
 func generateJwtToken() (string, error) {
-	purpose := api.NewPurpose("testing", true, "n/a")
-	service := api.NewServiceSinglePurpose("testing", purpose)
+	service := api.NewServiceSinglePurpose("testing", api.DefaultPurpose())
 
 	// The first controller is the primary controller
 	controller := cfg.Controllers[0]
