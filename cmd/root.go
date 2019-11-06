@@ -16,8 +16,12 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-  Use:   "consent-receipt-go",
-  Short: "Utilities for working with Consent Receipts",
+  Use:      "consent-receipt-go",
+  Short:    "Utilities for working with Consent Receipts",
+  Long:     `consent-receipt-go is a CLI app and library for generating and
+validating Consent Receipts pursuant to the Kantara Initiative
+Consent Receipt Specificiation (KI-CR-v1.1.0)`,
+  Version:  "0.0.1",
 }
 
 func Execute() {
