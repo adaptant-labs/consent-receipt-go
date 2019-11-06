@@ -35,7 +35,6 @@ const (
 )
 
 func (p PurposeSpecification) MarshalJSON() ([]byte, error) {
-	fmt.Printf("Marshalling JSON: %+v\n", p)
 	buf := bytes.NewBufferString(`"`)
 	buf.WriteString(p.PurposeWithPrefix())
 	buf.WriteString(`"`)

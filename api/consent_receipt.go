@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/adaptant-labs/consent-receipt-go/api/category"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/google/uuid"
 	"strings"
@@ -8,19 +9,19 @@ import (
 )
 
 type ConsentReceipt struct {
-	Version				string `json:"version"`
-	Jurisdiction		string `json:"jurisdiction"`
-	ConsentTimestamp	int64 `json:"consentTimestamp"`
-	CollectionMethod	string `json:"collectionMethod"`
-	ConsentReceiptID	string `json:"consentReceiptID"`
-	PublicKey			string `json:"publicKey,omitempty"`
-	Language			string `json:"language,omitempty"`
-	SubjectID			string `json:"piiPrincipalId"`
-	DataControllers		[]*DataController `json:"piiControllers"`
-	PolicyUrl			string `json:"policyURL"`
-	Services			[]*Service `json:"services,omitempty"`
-	Sensitive			bool `json:"sensitive"`
-	DataCategories		[]*DataCategory `json:"spiCat,omitempty"`
+	Version				string                  `json:"version"`
+	Jurisdiction		string                     `json:"jurisdiction"`
+	ConsentTimestamp	int64                      `json:"consentTimestamp"`
+	CollectionMethod	string                     `json:"collectionMethod"`
+	ConsentReceiptID	string                     `json:"consentReceiptID"`
+	PublicKey			string                    `json:"publicKey,omitempty"`
+	Language			string                     `json:"language,omitempty"`
+	SubjectID			string                    `json:"piiPrincipalId"`
+	DataControllers		[]*DataController       `json:"piiControllers"`
+	PolicyUrl			string                    `json:"policyURL"`
+	Services			[]*Service                 `json:"services,omitempty"`
+	Sensitive			bool                      `json:"sensitive"`
+	DataCategories		[]*category.DataCategory `json:"spiCat,omitempty"`
 }
 
 func NewConsentReceipt() *ConsentReceipt {
