@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/fatih/camelcase"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"strconv"
 	"strings"
 )
@@ -170,7 +170,7 @@ func PurposeSpecificationFromString(purposeStr string) PurposeSpecification {
 	numStr := strings.Split(purposeStr, " - ")
 	num, err := strconv.Atoi(numStr[0])
 	if err != nil {
-		log.Println("Failed to decode purpose specification")
+		log.Error("Failed to decode purpose specification")
 		return purposeUndefined
 	}
 
@@ -180,7 +180,7 @@ func PurposeSpecificationFromString(purposeStr string) PurposeSpecification {
 		return PurposeSpecification(num)
 	}
 
-	log.Printf("Invalid purpose specification (%d)\n", num)
+	log.Errorf("Invalid purpose specification (%d)\n", num)
 	return purposeUndefined
 }
 

@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/fatih/camelcase"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"strconv"
 	"strings"
 )
@@ -81,14 +81,14 @@ func (c DataCategory) Name() string {
 		return name
 	}
 
-	log.Printf("Unknown data category specified (%d)\n", c)
+	log.Errorf("Unknown data category specified (%d)\n", c)
 	return ""
 }
 
 func (c DataCategory) Category() string {
 	name := c.Name()
 	if name == "" {
-		log.Printf("Unknown data category specified (%d)\n", c)
+		log.Errorf("Unknown data category specified (%d)\n", c)
 		return ""
 	}
 
@@ -104,7 +104,7 @@ func (c DataCategory) Category() string {
 
 func (c DataCategory) CategoryWithPrefix() string {
 	if _, ok := toString[c]; !ok {
-		log.Printf("Unknown data category specified (%d)\n", c)
+		log.Errorf("Unknown data category specified (%d)\n", c)
 		return ""
 	}
 
@@ -119,7 +119,7 @@ func DataCategoryFromString(categoryStr string) DataCategory {
 	numStr := strings.Split(categoryStr, " - ")
 	num, err := strconv.Atoi(numStr[0])
 	if err != nil {
-		log.Println("Failed to decode data category")
+		log.Error("Failed to decode data category")
 		return categoryUndefined
 	}
 
@@ -129,7 +129,7 @@ func DataCategoryFromString(categoryStr string) DataCategory {
 		return DataCategory(num)
 	}
 
-	log.Printf("Invalid category specification (%d)\n", num)
+	log.Errorf("Invalid category specification (%d)\n", num)
 	return categoryUndefined
 }
 
