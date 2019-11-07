@@ -27,6 +27,10 @@ func generateJsonReceipt() error {
 
 	cr.GenerateJurisdictions()
 
+	if len(cr.SensitiveCategories) > 1 {
+		cr.Sensitive = true
+	}
+
 	if cr.PolicyUrl == "" {
 		cr.PolicyUrl = cfg.Config.PrivacyPolicyUrl
 	}
