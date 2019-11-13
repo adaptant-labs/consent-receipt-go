@@ -26,11 +26,13 @@ func dumpJwtToken(token *jwt.Token) error {
 
 func parseJwtToken(tokenStr string) (*jwt.Token, error) {
 	return jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); ok {
+			return []byte(cfg.Config.SigningKey), nil
+		} else if _, ok := token.Method.(*jwt.SigningMethodRSA); ok {
+			return cfg.PublicKey, nil
 		}
 
-		return []byte(cfg.Config.SigningKey), nil
+		return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 	})
 }
 

@@ -4,8 +4,9 @@ import (
 	"fmt"
 	"github.com/adaptant-labs/consent-receipt-go/api"
 	"github.com/dgrijalva/jwt-go"
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"log"
+
 )
 
 func generateJwtToken() (string, error) {
@@ -36,13 +37,22 @@ func generateJwtToken() (string, error) {
 
 	// Create the Claims
 	claims := cr.GenerateClaims()
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	ss, err := token.SignedString([]byte(cfg.Config.SigningKey))
-	if err != nil {
-		return "", err
+
+	var signedString string
+	var err error
+
+	if cfg.PrivateKey != nil {
+		token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+		signedString, err = token.SignedString(cfg.PrivateKey)
+	} else {
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+		signedString, err = token.SignedString([]byte(cfg.Config.SigningKey))
+		if err != nil {
+			return "", err
+		}
 	}
 
-	return ss, nil
+	return signedString, err
 }
 
 // generateTokenCmd represents the token command
