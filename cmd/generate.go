@@ -19,7 +19,38 @@ var (
 
 	categoryNumsStr []string
 	categoryGroups [][]category.DataCategory
+
+	consentReceipt *api.ConsentReceipt
 )
+
+func prepareConsentReceipt() *api.ConsentReceipt {
+	service := api.NewServiceMultiPurpose(serviceName, purposes)
+
+	// The first controller is the primary controller
+	controller := cfg.Controllers[0]
+	cr := controller.NewConsentReceipt()
+
+	cr.AddService(service)
+
+	// Add any additional controllers
+	if len(cfg.Controllers) > 1 {
+		for _, iter := range cfg.Controllers[1:] {
+			cr.AddDataController(&iter)
+		}
+	}
+
+	cr.GenerateJurisdictions()
+
+	if len(cr.SensitiveCategories) > 1 {
+		cr.Sensitive = true
+	}
+
+	if cr.PolicyUrl == "" {
+		cr.PolicyUrl = cfg.Config.PrivacyPolicyUrl
+	}
+
+	return cr
+}
 
 func categoriesFromNumString(numStr string) []category.DataCategory {
 	nums := strings.Split(numStr, ",")
@@ -46,7 +77,7 @@ var generateCmd = &cobra.Command{
 		}
 
 		if len(categoryGroups) != len(purposeNums) {
-			return fmt.Errorf("Number of data category specifications (%d) must match number of defined purposes (%d)", len(categoryGroups), len(purposeNums))
+			return fmt.Errorf("number of data category specifications (%d) must match number of defined purposes (%d)", len(categoryGroups), len(purposeNums))
 		}
 
 		for k, v := range purposeNums {
@@ -56,9 +87,9 @@ var generateCmd = &cobra.Command{
 			primary = false
 		}
 
+		consentReceipt = prepareConsentReceipt()
 		return nil
 	},
-
 }
 
 func init() {

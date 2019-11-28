@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"encoding/json"
-	"github.com/adaptant-labs/consent-receipt-go/api"
 	"log"
 	"os"
 
@@ -10,35 +9,10 @@ import (
 )
 
 func generateJsonReceipt() error {
-	service := api.NewServiceMultiPurpose(serviceName, purposes)
-
-	// The first controller is the primary controller
-	controller := cfg.Controllers[0]
-	cr := controller.NewConsentReceipt()
-
-	cr.AddService(service)
-
-	// Add any additional controllers
-	if len(cfg.Controllers) > 1 {
-		for _, iter := range cfg.Controllers[1:] {
-			cr.AddDataController(&iter)
-		}
-	}
-
-	cr.GenerateJurisdictions()
-
-	if len(cr.SensitiveCategories) > 1 {
-		cr.Sensitive = true
-	}
-
-	if cr.PolicyUrl == "" {
-		cr.PolicyUrl = cfg.Config.PrivacyPolicyUrl
-	}
-
 	encoder := json.NewEncoder(os.Stdout)
 	encoder.SetIndent("", "\t")
 
-	return encoder.Encode(cr)
+	return encoder.Encode(consentReceipt)
 }
 
 // generateReceiptCmd represents the receipt command

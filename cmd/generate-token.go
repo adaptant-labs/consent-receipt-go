@@ -2,41 +2,14 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/adaptant-labs/consent-receipt-go/api"
 	"github.com/dgrijalva/jwt-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-
 )
 
 func generateJwtToken() (string, error) {
-	service := api.NewServiceMultiPurpose(serviceName, purposes)
-
-	// The first controller is the primary controller
-	controller := cfg.Controllers[0]
-	cr := controller.NewConsentReceipt()
-
-	cr.AddService(service)
-
-	// Add any additional controllers
-	if len(cfg.Controllers) > 1 {
-		for _, iter := range cfg.Controllers[1:] {
-			cr.AddDataController(&iter)
-		}
-	}
-
-	cr.GenerateJurisdictions()
-
-	if len(cr.SensitiveCategories) > 1 {
-		cr.Sensitive = true
-	}
-
-	if cr.PolicyUrl == "" {
-		cr.PolicyUrl = cfg.Config.PrivacyPolicyUrl
-	}
-
 	// Create the Claims
-	claims := cr.GenerateClaims()
+	claims := consentReceipt.GenerateClaims()
 
 	var signedString string
 	var err error
