@@ -7,6 +7,7 @@ require (
 	github.com/fatih/camelcase v1.0.0
 	github.com/google/uuid v1.1.1
 	github.com/mitchellh/go-homedir v1.1.0
+	github.com/muesli/reflow v0.0.0-20191128061954-86f094cbed14
 	github.com/pelletier/go-toml v1.6.0 // indirect
 	github.com/sirupsen/logrus v1.4.2
 	github.com/spf13/afero v1.2.2 // indirect
