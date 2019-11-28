@@ -5,6 +5,10 @@ import (
 	"github.com/adaptant-labs/consent-receipt-go/api/purpose"
 )
 
+var (
+	DefaultTermination = "Subscription end date + 1 year"
+)
+
 type Purpose struct {
 	Purpose              string                       `json:"purpose"`
 	PurposeCategory      purpose.PurposeSpecification `json:"purposeCategory"`
@@ -46,5 +50,5 @@ func NewPurposeShared(description string, spec purpose.PurposeSpecification, cat
 }
 
 func DefaultPurpose() *Purpose {
-	return NewPurpose(purpose.CoreFunction, []category.DataCategory{category.Biographical}, true, "Subscription end date + 1 year")
+	return NewPurpose(purpose.CoreFunction, []category.DataCategory{category.Biographical}, true, DefaultTermination)
 }
