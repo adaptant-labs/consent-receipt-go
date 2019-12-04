@@ -15,6 +15,8 @@ var (
 	subjectId string
 	terminationPeriod string
 
+	sensitiveNumsStr string
+
 	purposeNums []int
 	purposes []*api.Purpose
 
@@ -42,15 +44,20 @@ func prepareConsentReceipt() *api.ConsentReceipt {
 
 	cr.GenerateJurisdictions()
 
-	if len(cr.SensitiveCategories) > 1 {
-		cr.Sensitive = true
-	}
-
 	if cr.PolicyUrl == "" {
 		cr.PolicyUrl = cfg.Config.PrivacyPolicyUrl
 	}
 
 	cr.SubjectID = subjectId
+
+	if len(sensitiveNumsStr) > 0 {
+		cr.Sensitive = true
+
+		sc := categoriesFromNumString(sensitiveNumsStr)
+		for _, v := range sc {
+			cr.AddSensitiveCategory(v)
+		}
+	}
 
 	return cr
 }
@@ -101,6 +108,7 @@ func init() {
 	generateCmd.PersistentFlags().StringVar(&terminationPeriod, "termination", api.DefaultTermination, "Termination period")
 	generateCmd.PersistentFlags().IntSliceVarP(&purposeNums, "purposes", "p", []int{ purpose.CoreFunction.Number() }, "List of purposes to include")
 	generateCmd.PersistentFlags().StringArrayVarP(&categoryNumsStr, "categories", "c", []string{ string(category.Biographical.Number()) }, "List of data categories to include, per purpose")
+	generateCmd.PersistentFlags().StringVar(&sensitiveNumsStr, "sensitive", "", "List of sensitive data categories used by service")
 
 	rootCmd.AddCommand(generateCmd)
 }

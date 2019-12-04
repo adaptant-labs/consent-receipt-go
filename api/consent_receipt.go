@@ -21,7 +21,7 @@ type ConsentReceipt struct {
 	PolicyUrl           string                   `json:"policyURL"`
 	Services            []*Service               `json:"services,omitempty"`
 	Sensitive           bool                     `json:"sensitive"`
-	SensitiveCategories []*category.DataCategory `json:"spiCat,omitempty"`
+	SensitiveCategories []category.DataCategory  `json:"spiCat,omitempty"`
 }
 
 func NewConsentReceipt() *ConsentReceipt {
@@ -42,7 +42,7 @@ func (cr *ConsentReceipt) AddService(service *Service) {
 	cr.Services = append(cr.Services, service)
 }
 
-func (cr *ConsentReceipt) AddSensitiveCategory(category *category.DataCategory) {
+func (cr *ConsentReceipt) AddSensitiveCategory(category category.DataCategory) {
 	cr.Sensitive = true
 	cr.SensitiveCategories = append(cr.SensitiveCategories, category)
 }
