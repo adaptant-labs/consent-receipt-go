@@ -2,31 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/dgrijalva/jwt-go"
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 )
-
-func generateJwtToken() (string, error) {
-	// Create the Claims
-	claims := consentReceipt.GenerateClaims()
-
-	var signedString string
-	var err error
-
-	if cfg.PrivateKey != nil {
-		token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-		signedString, err = token.SignedString(cfg.PrivateKey)
-	} else {
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-		signedString, err = token.SignedString([]byte(cfg.Config.SigningKey))
-		if err != nil {
-			return "", err
-		}
-	}
-
-	return signedString, err
-}
 
 // generateTokenCmd represents the token command
 var generateTokenCmd = &cobra.Command{
@@ -37,7 +15,7 @@ var generateTokenCmd = &cobra.Command{
 			log.Fatal("Missing controller definition(s)")
 		}
 
-		token, err := generateJwtToken()
+		token, err := cfg.GenerateJwtToken(*consentReceipt)
 		if err != nil {
 			log.Fatal(err)
 		}
