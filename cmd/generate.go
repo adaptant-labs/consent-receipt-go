@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/adaptant-labs/consent-receipt-go/api"
 	"github.com/adaptant-labs/consent-receipt-go/api/category"
+	"github.com/adaptant-labs/consent-receipt-go/api/keys"
 	"github.com/adaptant-labs/consent-receipt-go/api/purpose"
 	"github.com/spf13/cobra"
 	"strconv"
@@ -58,6 +59,8 @@ func prepareConsentReceipt() *api.ConsentReceipt {
 			cr.AddSensitiveCategory(v)
 		}
 	}
+
+	cr.PublicKey, _ = keys.Fingerprint(*cfg.PublicKey)
 
 	return cr
 }

@@ -1,11 +1,14 @@
 package keys
 
 import (
+	"bytes"
 	"crypto/rand"
 	"crypto/rsa"
+	"crypto/sha256"
 	"crypto/x509"
 	"encoding/gob"
 	"encoding/pem"
+	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
@@ -122,3 +125,24 @@ func savePublicPEMKey(fileName string, pubkey rsa.PublicKey) error {
 	return pem.Encode(pemfile, pemkey)
 }
 
+func formatFingerprint(raw string) string {
+	var buf bytes.Buffer
+
+	for i, c := range raw {
+		buf.WriteByte(byte(c))
+		if (i+1)%2 == 0 && i != len(raw)-1 {
+			buf.WriteByte(byte(':'))
+		}
+	}
+
+	return buf.String()
+}
+
+func Fingerprint(pubkey rsa.PublicKey) (string, error) {
+	asn1Bytes, err := x509.MarshalPKIXPublicKey(&pubkey)
+	if err != nil {
+		return "", err
+	}
+
+	return formatFingerprint(fmt.Sprintf("%x", sha256.Sum256(asn1Bytes))), nil
+}
