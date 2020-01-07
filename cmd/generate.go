@@ -60,7 +60,9 @@ func prepareConsentReceipt() *api.ConsentReceipt {
 		}
 	}
 
-	cr.PublicKey, _ = keys.Fingerprint(*cfg.PublicKey)
+	if cfg.PublicKey != nil {
+		cr.PublicKey, _ = keys.Fingerprint(*cfg.PublicKey)
+	}
 
 	return cr
 }
