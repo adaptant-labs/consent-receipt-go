@@ -97,14 +97,22 @@ var generateCmd = &cobra.Command{
 			categoryGroups = append(categoryGroups, categoriesFromNumString(v))
 		}
 
-		if len(categoryGroups) != len(purposeNums) {
-			return fmt.Errorf("number of data category specifications (%d) must match number of defined purposes (%d)", len(categoryGroups), len(purposeNums))
+		numCategories := len(categoryGroups)
+		numScopes := len(scopes)
+		numPurposes := len(purposeNums)
+
+		if numCategories != numPurposes {
+			return fmt.Errorf("number of data category specifications (%d) must match number of defined purposes (%d)", numCategories, numPurposes)
+		}
+
+		if numScopes > numPurposes {
+			return fmt.Errorf("number of scope specifications (%d) cannot exceed number of defined purposes (%d)", numScopes, numPurposes)
 		}
 
 		for k, v := range purposeNums {
 			spec := purpose.PurposeSpecification(v)
 			p := api.NewPurpose(spec, categoryGroups[k], primary, terminationPeriod)
-			if len(scopes) > 0 && scopes[k] != "" {
+			if k < numScopes {
 				p.Scopes = strings.ReplaceAll(scopes[k], ",", " ")
 			}
 			purposes = append(purposes, p)
