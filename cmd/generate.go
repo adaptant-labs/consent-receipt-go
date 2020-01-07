@@ -116,7 +116,7 @@ func init() {
 	generateCmd.PersistentFlags().StringVar(&subjectId, "id", "", "Unique identifier for the PII Principal / Data Subject")
 	generateCmd.PersistentFlags().StringVar(&terminationPeriod, "termination", api.DefaultTermination, "Termination period")
 	generateCmd.PersistentFlags().IntSliceVarP(&purposeNums, "purposes", "p", []int{ purpose.CoreFunction.Number() }, "List of purposes to include")
-	generateCmd.PersistentFlags().StringArrayVarP(&categoryNumsStr, "categories", "c", []string{ string(category.Biographical.Number()) }, "List of data categories to include, per purpose")
+	generateCmd.PersistentFlags().StringArrayVarP(&categoryNumsStr, "categories", "c", []string{ strconv.Itoa(category.Biographical.Number()) }, "List of data categories to include, per purpose")
 	generateCmd.PersistentFlags().StringArrayVarP(&scopes, "scopes", "s", nil, "List of auth scopes to include, per purpose")
 	generateCmd.PersistentFlags().StringVar(&sensitiveNumsStr, "sensitive", "", "List of sensitive data categories used by service")
 
