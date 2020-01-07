@@ -18,6 +18,9 @@ type Purpose struct {
 	Termination          string                       `json:"termination"`
 	ThirdPartyDisclosure bool                         `json:"thirdPartyDisclosure"`
 	ThirdPartyName       string                       `json:"thirdPartyName,omitempty"`
+
+	// Extensions - OAuth scopes associated with this specific purpose of processing
+	Scopes string `json:"scopes,omitempty"`
 }
 
 func (p *Purpose) AddDataCategory(cat category.DataCategory) {
