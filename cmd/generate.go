@@ -13,6 +13,7 @@ import (
 
 var (
 	serviceName string
+	jurisdiction string
 	subjectId string
 	terminationPeriod string
 
@@ -44,7 +45,11 @@ func prepareConsentReceipt() *api.ConsentReceipt {
 		}
 	}
 
-	cr.GenerateJurisdictions()
+	if jurisdiction != "" {
+		cr.Jurisdiction = strings.ReplaceAll(jurisdiction, ",", " ")
+	} else {
+		cr.GenerateJurisdictions()
+	}
 
 	if cr.PolicyUrl == "" {
 		cr.PolicyUrl = cfg.Config.PrivacyPolicyUrl
@@ -114,6 +119,7 @@ var generateCmd = &cobra.Command{
 func init() {
 	generateCmd.PersistentFlags().StringVar(&serviceName, "service", "testing", "Name of the service to generate a receipt for")
 	generateCmd.PersistentFlags().StringVar(&subjectId, "id", "", "Unique identifier for the PII Principal / Data Subject")
+	generateCmd.PersistentFlags().StringVar(&jurisdiction, "jurisdiction", "DE", "List of jurisdicitions in ISO 3166-1 alpha-2 format")
 	generateCmd.PersistentFlags().StringVar(&terminationPeriod, "termination", api.DefaultTermination, "Termination period")
 	generateCmd.PersistentFlags().IntSliceVarP(&purposeNums, "purposes", "p", []int{ purpose.CoreFunction.Number() }, "List of purposes to include")
 	generateCmd.PersistentFlags().StringArrayVarP(&categoryNumsStr, "categories", "c", []string{ strconv.Itoa(category.Biographical.Number()) }, "List of data categories to include, per purpose")
